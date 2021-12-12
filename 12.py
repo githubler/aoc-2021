@@ -12,7 +12,6 @@ def get_input():
 #
 
 class Cave():
-    visited_twice = False
 
     def __init__(self, name):
         self.name = name
@@ -42,9 +41,6 @@ class Cave():
 
     def can_visit(self):
         if self.is_visited and not self.is_multiple:
-            #if not Cave.visited_twice:
-            #    Cave.visited_twice = True
-            #    return True
             return False
         else:
             return True
@@ -61,7 +57,6 @@ class Cave():
                 num_paths += cave.visit_neighbours()
 
         self.is_visited = False
-        #Cave.visited_twice = False
 
         return num_paths
 
@@ -105,79 +100,3 @@ num_paths = start_cave.visit_neighbours()
 print()
 print("Submit 1: ", num_paths)
 
-exit(0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-start-A
-start-b
-A-c
-A-b
-b-d
-A-end
-b-end
-
-
-
-
-
-dc-end
-HN-start
-start-kj
-dc-start
-dc-HN
-LN-dc
-HN-end
-kj-sa
-kj-HN
-kj-dc
-
-
-
-
-
-fs-end
-he-DX
-fs-he
-start-DX
-pj-DX
-end-zg
-zg-sl
-zg-pj
-pj-he
-RW-he
-fs-DX
-pj-RW
-zg-RW
-start-pj
-he-WI
-zg-he
-pj-fs
-start-RW
