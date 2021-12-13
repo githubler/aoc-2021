@@ -1,6 +1,5 @@
 #day 13
 
-
 import numpy as np
 
 def get_input():
