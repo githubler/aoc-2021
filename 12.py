@@ -1,69 +1,12 @@
 #day 12
 
 
-
 def get_input():
-    with open('2021/12 input.txt') as f:
+    with open('12 input.txt') as f:
         return [x.strip() for x in f.readlines()]
 
 
-#
-# part 1
-#
-
-class Cave():
-
-    def __init__(self, name):
-        self.name = name
-        self.neighbours = set()
-        self.is_visited = False
-        if name == name.upper():
-            self.is_multiple = True
-        else:
-            self.is_multiple = False
-        if name == 'start':
-            self.is_visited = True
-
-    def add_neighbour(self, neighbour):
-        self.neighbours.add(neighbour)
-
-    def get_name(self):
-        return self.name
-
-    def get_neighbours(self):
-        return self.neighbours
-
-    def __str__(self):
-        return f'{self.name}'
-
-    def __repr__(self) -> str:
-        return str(self)
-
-    def can_visit(self):
-        if self.is_visited and not self.is_multiple:
-            return False
-        else:
-            return True
-
-    def visit_neighbours(self):
-        num_paths = 0
-        if self.name == 'end':
-            num_paths = 1
-            return num_paths
-
-        self.is_visited = True
-        for cave in self.neighbours:
-            if cave.can_visit():
-                num_paths += cave.visit_neighbours()
-
-        self.is_visited = False
-
-        return num_paths
-
-
-
 def build_cave_system():
-    start = Cave("START")
     caves = {}
 
     for line in get_input():
@@ -92,11 +35,71 @@ def build_cave_system():
     return caves['start']
 
 
+class Cave():
+    def __init__(self, name):
+        self.name = name
+        self.neighbours = set()
+        if name == name.upper():
+            self.multiple = True
+        else:
+            self.multiple = False
+
+    def add_neighbour(self, neighbour):
+        self.neighbours.add(neighbour)
+
+    def is_start(self):
+        return 'start' == self.name
+
+    def is_small_cave(self):
+        return self.name[0].islower()
+
+    def get_name(self):
+        return self.name
+
+    def is_multiple(self):
+        return self.multiple
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def visit_neighbours(self, visited, vis_twice=False):
+        num_paths = 0
+        if self.name == 'end':
+            num_paths = 1
+            return num_paths
+
+        visited += [self.name]
+        for cave in self.neighbours:
+            if cave.is_start():
+                continue
+
+            if not (cave.get_name() in visited and not cave.is_multiple()):
+                num_paths += cave.visit_neighbours(visited, vis_twice)
+            elif cave.is_small_cave() and vis_twice==True and not cave.is_start():
+                num_paths += cave.visit_neighbours(visited, False)
+
+        visited.pop()
+        return num_paths
 
 
+# build cave system for part 1&2
 start_cave = build_cave_system()
-num_paths = start_cave.visit_neighbours()
+
+#
+# part 1
+#
+num_paths = start_cave.visit_neighbours([])
 
 print()
 print("Submit 1: ", num_paths)
 
+#
+# part 2
+#
+num_paths = start_cave.visit_neighbours([], True)
+
+print()
+print("Submit 2: ", num_paths)
